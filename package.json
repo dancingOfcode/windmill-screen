@@ -1,0 +1,26 @@
+{
+  "name": "threejs-vue3",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@arco-design/web-vue": "^2.44.7",
+    "@tweenjs/tween.js": "^25.0.0",
+    "lodash": "^4.17.21",
+    "pinia": "^2.1.7",
+    "three": "^0.167.0",
+    "uuid": "^10.0.0",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "sass": "^1.77.8",
+    "vite": "^5.3.1"
+  }
+}
