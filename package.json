@@ -1,16 +1,24 @@
 {
-  "name": "threejs-vue3",
+  "name": "windmill-screen",
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "author": "xu.zhengyou",
+  "description": "threejs vue3 可视化 数字孪生",
   "scripts": {
     "dev": "vite --mode development",
     "build": "vite build --mode production",
     "preview": "vite preview"
   },
+  "keywords": [
+    "vue3",
+    "threejs",
+    "Digital twin",
+    "3D visualization"
+  ],
   "dependencies": {
-    "@arco-design/web-vue": "^2.44.7",
     "@tweenjs/tween.js": "^25.0.0",
+    "ant-design-vue": "^4.2.3",
     "highcharts": "^11.4.6",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",

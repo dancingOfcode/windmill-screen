@@ -1,14 +1,12 @@
 # threejs-vue3
 
-This template should help get you started developing with Vue 3 in Vite.
+## 技术栈 
 
-## Recommended IDE Setup
+Vue3 + Vite + Three.js + Highcharts + ant-design-vue
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 项目浏览
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+See [项目地址](https://vitejs.dev/config/)
 
 ## Project Setup
 
