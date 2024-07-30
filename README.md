@@ -6,7 +6,7 @@ Vue3 + Vite + Three.js + Highcharts + ant-design-vue
 
 ## 项目浏览
 
-See [项目地址](https://vitejs.dev/config/)
+See [项目地址](https://dancingofcode.github.io/windmill-screen/)
 
 ## Project Setup
 
