@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia'
 import Layout from '@/layout/index.vue'
 import { useLayoutStore } from '@/stores/layout'
 import BaseTurbine from '@/components/BaseTurbine/index.vue'
-// import Witgets from './widgets'
+import Witgets from './widgets'
 
 const { chunkModules } = storeToRefs(useLayoutStore())
 </script>
@@ -12,15 +12,15 @@ const { chunkModules } = storeToRefs(useLayoutStore())
   <Layout>
     <BaseTurbine>
       <template #left>
-        <!-- <component :is="Witgets[item]" v-for="item in chunkModules.left" :key="item" /> -->
+        <component :is="Witgets[item]" v-for="item in chunkModules.left" :key="item" />
       </template>
       <template #right>
-        <!-- <component :is="Witgets[item]" v-for="item in chunkModules.right" :key="item" /> -->
+        <component :is="Witgets[item]" v-for="item in chunkModules.right" :key="item" />
       </template>
-      <!-- <template #control>
+      <template #control>
         <Witgets.ControlPanel></Witgets.ControlPanel>
         <Witgets.ControlTurbine></Witgets.ControlTurbine>
-      </template> -->
+      </template>
     </BaseTurbine>
   </Layout>
 </template>
