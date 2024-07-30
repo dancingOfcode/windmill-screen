@@ -6,7 +6,7 @@ import { fileURLToPath, URL } from "node:url";
 export default defineConfig({
   base: "./",
   build: {
-    outDir: "./dist",
+    outDir: "./docs",
   },
   plugins: [vue()],
   resolve: {
