@@ -1,25 +1,25 @@
-import { isFunction } from "lodash";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { onMounted, shallowRef, ref } from "vue";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer";
 import * as THREE from "three";
+import ThreeBase from "./core";
+import { isFunction } from "lodash";
 import TWEEN from "@tweenjs/tween.js";
 import useLoading from "@/hooks/useLoading";
-import ThreeBase from "./core";
+import { onMounted, onUnmounted, shallowRef, ref } from "vue";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 function useThree() {
+  const mixers = [];
   const container = ref();
-  const { loading, openLoading, closeLoading } = useLoading(true, 500);
+  const control = shallowRef();
+  const composers = new Map();
   const scene = shallowRef();
   const camera = shallowRef();
   const renderer = shallowRef();
   const CSSRenderer = shallowRef();
-  const control = shallowRef();
-  const mixers = [];
   const clock = new THREE.Clock();
-  const composers = new Map();
   const renderMixins = new Map();
+  const { loading, openLoading, closeLoading } = useLoading(true, 500);
+
   onMounted(() => {
     const el = container.value;
     scene.value = ThreeBase.initScene();
@@ -30,7 +30,55 @@ function useThree() {
       camera.value,
       CSSRenderer.value.domElement
     );
+    // 监听 window.onresize 事件
+    window.onresize = () => {
+      renderer.value.setSize(window.innerWidth, window.innerHeight);
+      camera.value.aspect = window.innerWidth / window.innerHeight;
+    };
   });
+
+  onUnmounted(() => {
+    // 销毁渲染引擎
+    renderer.value.dispose();
+    // 清除场景中的所有对象
+    while (scene.value.children.length > 0) {
+      const object = scene.value.children[0];
+
+      if (object.isMesh) {
+        object.geometry.dispose();
+        if (object.material.isMaterial) {
+          cleanMaterial(object.material);
+        } else {
+          const materials = object.material;
+          for (let i = 0; i < materials.length; i++) {
+            cleanMaterial(materials[i]);
+          }
+        }
+      }
+
+      scene.value.remove(object);
+      object.destroy && object.destroy();
+    }
+    // 取消动画播放
+    cancelAnimationFrame(render);
+    // 释放 window.onresize 内存
+    window.onresize = null;
+  });
+
+  // 材质清理函数
+  const cleanMaterial = (material) => {
+    material.dispose(); // 清除材质
+    if (material.map) material.map.dispose(); // 清除贴图
+    if (material.lightMap) material.lightMap.dispose();
+    if (material.bumpMap) material.bumpMap.dispose();
+    if (material.normalMap) material.normalMap.dispose();
+    if (material.specularMap) material.specularMap.dispose();
+    if (material.envMap) material.envMap.dispose();
+    if (material.reflectivityMap) material.reflectivityMap.dispose();
+    if (material.alphaMap) material.alphaMap.dispose();
+    if (material.gradientMap) material.gradientMap.dispose();
+  };
+
   const render = () => {
     const delta = new THREE.Clock().getDelta();
     renderer.value.render(scene.value, camera.value);
@@ -48,15 +96,15 @@ function useThree() {
     await Promise.all(tasks);
     closeLoading();
   };
+
   const loadGLTF = (url) => {
-    console.log("url", url);
     const loader = new GLTFLoader();
+    const draco = new DRACOLoader();
+    draco.setDecoderPath("./draco/");
+    loader.setDRACOLoader(draco);
     const onCompleted = (object, resolve) => resolve(object);
     return new Promise((resolve) => {
-      loader.load(url, (object) => {
-        console.log("object", object);
-        onCompleted(object, resolve);
-      });
+      loader.load(url, (object) => onCompleted(object, resolve));
     });
   };
 
@@ -69,6 +117,7 @@ function useThree() {
     mixers.push(mixer);
     return undefined;
   };
+
   return {
     container,
     loading,
