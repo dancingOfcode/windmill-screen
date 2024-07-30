@@ -4,6 +4,10 @@ import { fileURLToPath, URL } from "node:url";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
+  build: {
+    outDir: "./dist",
+  },
   plugins: [vue()],
   resolve: {
     alias: {

@@ -1,13 +1,19 @@
 <template>
     <div class="layout">
-        <div class="layout-header">{{ appName }}</div>
+        <div class="layout-header">
+            {{ appName }}
+            <div class="screen-btn" :class="isFullScreen ? 'exit-icon' : 'full-icon'" @click="toggleFullScreen"></div>
+        </div>
         <div class="layout-main">
             <slot></slot>
         </div>
     </div>
 </template>
 <script setup>
+import { useFullScreen } from '@/hooks'
 const appName = '大型风力发电机监控平台'
+const { isFullScreen, toggleFullScreen } = useFullScreen()
+
 </script>
 <style lang="scss" scoped>
 .layout {
@@ -31,6 +37,29 @@ const appName = '大型风力发电机监控平台'
         background: url('@/assets/images/header_bg.png');
         background-repeat: no-repeat;
         background-size: 100% 64px;
+
+        .screen-btn {
+            position: absolute;
+            width: 28px;
+            height: 24px;
+            top: 8px;
+            right: 12px;
+            z-index: 999;
+            cursor: pointer;
+            // 禁止focus 
+            
+
+            &.exit-icon {
+                background: url('@/assets/images/exitFullScreen.png') no-repeat;
+                background-size: 100% 100%;
+            }
+
+            &.full-icon {
+                background: url('@/assets/images/fullScreen.png') no-repeat;
+                background-size: 100% 100%;
+            }
+        }
+
     }
 
     .layout-main {

@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { computed } from "vue";
 import { createPinia } from "pinia";
-import { map, filter, size, sortBy } from "lodash";
-import { Message } from "@arco-design/web-vue";
+import { message } from "ant-design-vue";
 import { useLocalStorageState } from "@/hooks";
+import { map, filter, size, sortBy } from "lodash";
 
 export const useLayoutStore = defineStore("app-layout", () => {
   /** @description: 所有的模块 */
@@ -65,7 +65,7 @@ export const useLayoutStore = defineStore("app-layout", () => {
     const module = layoutModules.value[moduleName];
     const visible = !module?.visible;
     if (visible && size(validModules.value) >= 6)
-      return Message.warning("至多勾选六个模块");
+      return message.warning("至多勾选六个模块");
     module.visible = visible;
     module.updateTime = new Date().getTime();
     return undefined;
