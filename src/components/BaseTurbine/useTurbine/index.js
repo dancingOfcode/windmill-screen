@@ -47,6 +47,7 @@ export function useTurbine() {
       scene.value?.add(directionalLight);
     });
   };
+
   // 加载风机骨架
   const loadTurbineSkeleton = async () => {
     const { scene: object, animations } = await loadGLTF(MODEL_URL.SKELETON);
@@ -57,6 +58,7 @@ export function useTurbine() {
     modelSkeleton.value = object;
     turbine.add(object);
   };
+
   // 加载风机平台
   const loadTurbinePlane = async () => {
     const { scene: object } = await loadGLTF(MODEL_URL.PLANE);
@@ -66,6 +68,7 @@ export function useTurbine() {
     modelPlane.value = object;
     turbine.add(object);
   };
+
   // 加载风机设备
   const loadTurbineEquipments = async () => {
     const { scene: object } = await loadGLTF(MODEL_URL.EQUIPMENT);
@@ -74,6 +77,7 @@ export function useTurbine() {
     modelEquipment.value = object;
     turbine.add(object);
   };
+
   // 风机骨架消隐动画
   const skeletonAnimation = () => {
     const shellModel = modelSkeleton.value?.getObjectByName(
@@ -101,6 +105,7 @@ export function useTurbine() {
       clippingPlane.constant -= 0.01;
     });
   };
+
   // 风机平台动画
   const planeAnimation = () => {
     // @ts-ignore
@@ -119,6 +124,7 @@ export function useTurbine() {
       }
     });
   };
+
   // 地面和风机骨架消隐藏
   const groundAndSkeletonHideAnimation = () => {
     const clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 3.5);
@@ -138,6 +144,7 @@ export function useTurbine() {
       clippingPlane.constant -= 0.04;
     });
   };
+
   // 地面和风机骨架显示
   const groundAndSkeletonShowAnimation = () => {
     const clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), -0.1);
@@ -157,6 +164,7 @@ export function useTurbine() {
       clippingPlane.constant += 0.04;
     });
   };
+
   // 设备分解动画
   const equipmentDecomposeAnimation = async () => {
     groundAndSkeletonHideAnimation();
@@ -174,6 +182,7 @@ export function useTurbine() {
       });
     });
   };
+
   // 设备合成动画
   const equipmentComposeAnimation = async () => {
     groundAndSkeletonShowAnimation();
@@ -189,6 +198,7 @@ export function useTurbine() {
       });
     });
   };
+
   // 风机设备点击事件
   const onEquipmentClick = () => {
     const equipmentList = [];
@@ -208,7 +218,6 @@ export function useTurbine() {
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, camera.value);
       const intersects = raycaster.intersectObject(modelEquipment.value, true);
-      // console.log('intersects', intersects[0].point)
       if (size(intersects) <= 0) return undefined;
       const equipment = intersects[0].object;
       if (!equipment) return undefined;
@@ -223,6 +232,7 @@ export function useTurbine() {
     document.addEventListener("click", handler);
     onUnmounted(() => document.removeEventListener("click", handler));
   };
+
   onMounted(async () => {
     loading.value = true;
     scene.value?.add(turbine);
@@ -242,6 +252,7 @@ export function useTurbine() {
     skeletonAnimation();
     planeAnimation();
   });
+
   return {
     container,
     loading,
