@@ -1,34 +1,55 @@
-import useBoolean from "@/hooks/useBoolean";
+import { ref, onMounted, onUnmounted } from 'vue';
 
 function useFullScreen() {
-  const { boolean, setTrue, setFalse } = useBoolean();
+  const isFullScreen = ref(false);
 
   const toggleFullScreen = () => {
-    console.log(boolean);
-    if (boolean.value) {
-      console.log(document);
+    if (isFullScreen.value) {
       if (document.exitFullscreen) {
-        document.exitFullscreen();
-        setFalse();
+        document.exitFullscreen(); // W3C 规范的标准方法
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen(); // WebKit 内核浏览器的方法
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen(); // Firefox 专有方法
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen(); // IE 和 Edge 的方法
       }
     } else {
-      const element = document.documentElement;
+      let element = document.documentElement;
       if (element.requestFullscreen) {
         element.requestFullscreen();
-        setTrue();
+      } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen();
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
       }
     }
   };
 
-  // 获取不同浏览器类型名称
-  // 监听全屏状态变化
+  // F11全屏
+  const keyDown = event => {
+    if (event.keyCode == 122) {
+      toggleFullScreen()
+    }
+  }
+
   const onFullScreenChange = () => {
-    console.log("onFullScreenChange");
-    console.log(document);
-    // isFullScreen.value = !!document.fullscreenElement;
+    isFullScreen.value = !!document.fullscreenElement;
   };
 
-  return { isFullScreen: boolean.value, toggleFullScreen };
+  onMounted(() => {
+    document.addEventListener("keydown", keyDown);
+    document.addEventListener('fullscreenchange', onFullScreenChange);
+  });
+
+  onUnmounted(() => {
+    document.removeEventListener('keydown', keyDown);
+    document.removeEventListener('fullscreenchange', onFullScreenChange);
+  });
+
+  return { isFullScreen, toggleFullScreen };
 }
 
 export default useFullScreen;
